@@ -1,19 +1,45 @@
 import PlayerEntry from "./PlayerEntry"
 import { useEffect, useState } from "react"
+import sessionState from "../store"
 
 export const GameEntry = () => {
+  // Global state imports
+  const globalPlayerData = sessionState((state) => state.globalPlayers) 
+  const setGlobalPlayers = sessionState((state) => state.setGlobalPlayers)
+
+  // Local player vars  
   const [playerOne, setPlayerOne] = useState({name: "", deck: ""})
   const [playerTwo, setPlayerTwo] = useState({name: "", deck: ""})
+  const [playerThree, setPlayerThree] = useState({name: "", deck: ""})
+  const [playerFour, setPlayerFour] = useState({name: "", deck: ""})
   
-  const [playerData, setPlayerData] = useState({playerOne: [], playerTwo: []})
+  // Local player submit
+  const [playerData, setPlayerData] = useState({
+    playerOne: globalPlayerData.player1, 
+    playerTwo: globalPlayerData.player2, 
+    playerThree: globalPlayerData.player3, 
+    playerFour: globalPlayerData.player4})
 
-  const submitDeck = (e) => {
+  // Post decks
+  const postDecks = (e) => {
     e.preventDefault()
-    setPlayerData({playerOne: playerOne, playerTwo: playerTwo})
+    setPlayerData({playerOne: playerOne, playerTwo: playerTwo, playerThree: playerThree, playerFour: playerFour})
+    setGlobalPlayers(playerData)
+}
+
+const clearDecks = (e) => {
+  e.preventDefault()
+  setPlayerOne({name: "", deck: ""})
+  setPlayerTwo({name: "", deck: ""})
+  setPlayerThree({name: "", deck: ""})
+  setPlayerFour({name: "", deck: ""})
+
+  setPlayerData({playerOne: playerOne, playerTwo: playerTwo, playerThree: playerThree, playerFour: playerFour})
 }
 
 useEffect(() => {
-  console.log(playerData)
+  console.log("This is local player data", playerData)
+  console.log("This is global player data", globalPlayerData)
 })
   
   return (
@@ -23,10 +49,13 @@ useEffect(() => {
     <form>
       <PlayerEntry playerNumber={1} playerNameDeck={playerOne} setPlayerNameDeck={setPlayerOne}/>
       <PlayerEntry playerNumber={2} playerNameDeck={playerTwo} setPlayerNameDeck={setPlayerTwo}/>    
-      <button onClick={submitDeck}></button>
+      <br/>
+      <PlayerEntry playerNumber={3} playerNameDeck={playerThree} setPlayerNameDeck={setPlayerThree}/>
+      <PlayerEntry playerNumber={4} playerNameDeck={playerFour} setPlayerNameDeck={setPlayerFour}/>    
+      <br/>
+      <button onClick={postDecks}>Save Decks</button>
+      <button onClick={clearDecks}>Clear Decks</button>
     </form>
-    <p>Player One: {playerData.playerOne.name}</p>
-    <p>Player Two: {playerData.playerTwo.name}</p>
     </>
   )
 }

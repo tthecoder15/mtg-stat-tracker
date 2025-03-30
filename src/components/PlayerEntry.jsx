@@ -15,9 +15,9 @@ const PlayerEntry = ({ playerNumber, playerNameDeck, setPlayerNameDeck }) => {
                 <h3>Player {playerNumber}</h3>
                 <h4></h4>
                 <p>Name</p>
-                <input onChange={playerNameChange}/>
+                <input onChange={playerNameChange} value={playerNameDeck.name}/>
                 <p>Deck</p>
-                <input onChange={playerDeckChange}/>
+                <input onChange={playerDeckChange} value={playerNameDeck.deck}/>
             </div>
         </form>
     </div>
